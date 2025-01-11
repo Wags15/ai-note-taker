@@ -1,4 +1,5 @@
 "use client";
+import FolderCard from "@/components/FolderCard";
 import { useState } from "react";
 
 export default function Home() {
@@ -11,7 +12,7 @@ export default function Home() {
 
       <div className='flex flex-wrap'>
         {folders.map((val) => (
-          <div className='w-[300px] h-[200px] bg-slate-200 m-5'>{val}</div>
+          <FolderCard />
         ))}
       </div>
     </div>
