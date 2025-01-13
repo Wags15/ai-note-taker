@@ -12,5 +12,5 @@ export interface FolderInfo {
 export interface FileInfo {
   id?: string;
   title: string;
-  parentId: string;
+  parentId?: string;
 }

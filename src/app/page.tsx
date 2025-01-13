@@ -1,8 +1,7 @@
 "use client";
-import FolderCard from "@/components/FolderCard";
+
 import FolderScreen from "@/components/FolderScreen";
 import { createClient } from "@/utils/supabase/client";
-import { SupabaseAuthClient } from "@supabase/supabase-js/dist/module/lib/SupabaseAuthClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FolderInfo } from "./types/global";
@@ -101,6 +100,7 @@ export default function Home() {
           folders={currFolders}
           onClickFolder={onClickFolder}
           onClickNote={() => {}}
+          userId={userId}
         />
       ) : (
         <h1>Please Sign In</h1>
