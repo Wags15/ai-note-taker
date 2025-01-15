@@ -1,7 +1,7 @@
 "use client";
-import { FileInfo, FolderInfo } from "@/app/types/global";
+import { FolderInfo } from "@/app/types/global";
 import FolderCard from "./FolderCard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { insertFolder } from "@/utils/insertInfo";
 import { IconContext } from "react-icons";
