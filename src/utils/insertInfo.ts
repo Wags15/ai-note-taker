@@ -40,7 +40,7 @@ export async function insertFile({
 }) {
   const { data, error } = await supabase
     .from("files")
-    .insert({ user_id: userId, name: title, parentId: parent });
+    .insert({ user_id: userId, name: title, parent: parent });
 
   console.log(error);
 }

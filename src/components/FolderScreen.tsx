@@ -3,7 +3,7 @@ import { FileInfo, FolderInfo } from "@/app/types/global";
 import FolderCard from "./FolderCard";
 import { useState } from "react";
 
-import { insertFolder } from "@/utils/insertInfo";
+import { insertFile, insertFolder } from "@/utils/insertInfo";
 import { IconContext } from "react-icons";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
@@ -23,10 +23,16 @@ export default function FolderScreen({
   const router = useRouter();
   const [openNewFolder, setOpenNewFolder] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  // Used to track if they create a new folder or file
+  const [isNewFolder, setIsNewFolder] = useState(true);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    insertFolder({ userId: userId, title: newTitle, parent: rootFolder.id! });
+    if (isNewFolder) {
+      insertFolder({ userId: userId, title: newTitle, parent: rootFolder.id! });
+    } else {
+      insertFile({ userId: userId, title: newTitle, parent: rootFolder.id! });
+    }
     setOpenNewFolder(false);
     setNewTitle("");
   };
@@ -35,6 +41,27 @@ export default function FolderScreen({
       {openNewFolder && (
         <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
           <div className='bg-white p-6 rounded-lg shadow-lg w-80'>
+            <button
+              onClick={() => setIsNewFolder(!isNewFolder)}
+              className={`flex items-center w-40 rounded-full transition-colors duration-300`}
+            >
+              <div className='flex w-full border-s border-black'>
+                <div
+                  className={`h-6 w-1/2 rounded-l-full transform transition-transform duration-300 ${
+                    isNewFolder ? "bg-blue-500" : "bg-white"
+                  }`}
+                >
+                  <p>Folder</p>
+                </div>
+                <div
+                  className={`h-6 w-1/2 rounded-r-full transform transition-transform duration-300 ${
+                    !isNewFolder ? "bg-blue-500" : "bg-white"
+                  }`}
+                >
+                  <p>File</p>
+                </div>{" "}
+              </div>
+            </button>
             <h2 className='text-xl font-semibold mb-4 text-gray-800'>
               Enter Title
             </h2>
