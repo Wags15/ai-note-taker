@@ -1,5 +1,5 @@
 "use client";
-import { FolderInfo } from "@/app/types/global";
+import { FileInfo, FolderInfo } from "@/app/types/global";
 import FolderCard from "./FolderCard";
 import { useState } from "react";
 
@@ -7,13 +7,16 @@ import { insertFolder } from "@/utils/insertInfo";
 import { IconContext } from "react-icons";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import FileCard from "./FileCard";
 
 export default function FolderScreen({
   folders,
+  files,
   rootFolder,
   userId,
 }: {
   folders: FolderInfo[];
+  files: FileInfo[];
   rootFolder: FolderInfo;
   userId: string;
 }) {
@@ -68,17 +71,28 @@ export default function FolderScreen({
       </div>
 
       <div className='flex flex-wrap items-center'>
-        {folders.map((val, idx) => (
-          <FolderCard
-            key={idx}
-            folder={val}
-            onClick={() => router.push(`/FolderPage/${val.id}`)}
-          />
-        ))}
-        {/* {files.map((val, idx) => (
-          <FolderCard key={idx} />
-        ))} */}
-
+        {folders && (
+          <>
+            {folders.map((val, idx) => (
+              <FolderCard
+                key={idx}
+                folder={val}
+                onClick={() => router.push(`/FolderPage/${val.id}`)}
+              />
+            ))}
+          </>
+        )}
+        {files && (
+          <>
+            {files.map((val, idx) => (
+              <FileCard
+                key={idx}
+                file={val}
+                onClick={() => router.push(`/FilePage/${val.id}`)}
+              />
+            ))}
+          </>
+        )}
         <div
           className='w-[150px] max-h-[100px] bg-slate-200 m-5 rounded-[200px] text-black p-6 flex flex-col justify-center items-center'
           onClick={() => setOpenNewFolder(true)}

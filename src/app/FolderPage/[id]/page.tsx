@@ -1,7 +1,11 @@
 import FolderScreen from "@/components/FolderScreen";
 import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/shared/Header";
-import { fetchFolder, fetchFolderChildren } from "@/utils/fetchInfo";
+import {
+  fetchFolder,
+  fetchFolderChildren,
+  fetchFolderChildrenFiles,
+} from "@/utils/fetchInfo";
 
 interface PageProps {
   params: Promise<{ id?: string }>; // Params is now a Promise
@@ -32,13 +36,22 @@ async function Page({ params }: PageProps) {
     folderId: id,
   });
   if (!currFolders) {
-    return <div>Error fetching folder</div>;
+    return <div>Error fetching folders</div>;
+  }
+
+  const currFiles = await fetchFolderChildrenFiles({
+    userId: userId,
+    folderId: id,
+  });
+  if (!currFiles) {
+    return <div>Error fetching files</div>;
   }
   return (
     <div>
       <Header />
       {userId ? (
         <FolderScreen
+          files={currFiles}
           rootFolder={currFolder}
           folders={currFolders}
           userId={userId}

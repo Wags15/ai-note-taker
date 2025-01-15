@@ -1,7 +1,13 @@
 import FolderScreen from "@/components/FolderScreen";
 import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/shared/Header";
-import { fetchFolder, fetchFolderChildren } from "@/utils/fetchInfo";
+import {
+  fetchFile,
+  fetchFileNotes,
+  fetchFolder,
+  fetchFolderChildren,
+} from "@/utils/fetchInfo";
+import FileScreen from "@/components/FileScreen";
 
 interface PageProps {
   params: Promise<{ id?: string }>; // Params is now a Promise
@@ -21,27 +27,23 @@ async function Page({ params }: PageProps) {
     return <div>Error retrieving user</div>;
   }
 
-  const currFolder = await fetchFolder({ userId: userId, folderId: id });
-  if (!currFolder) {
-    return <div>Error fetching folder</div>;
+  const currFile = await fetchFile({ userId: userId, fileId: id });
+  if (!currFile) {
+    return <div>Error fetching file</div>;
   }
 
-  const currFolders = await fetchFolderChildren({
+  const notes = await fetchFileNotes({
     userId: userId,
-    folderId: id,
+    fileId: id,
   });
-  if (!currFolders) {
-    return <div>Error fetching folder</div>;
+  if (!notes) {
+    return <div>Error fetching notes</div>;
   }
   return (
     <div>
       <Header />
       {userId ? (
-        <FolderScreen
-          rootFolder={currFolder}
-          folders={currFolders}
-          userId={userId}
-        />
+        <FileScreen rootFile={currFile} notes={notes} userId={userId} />
       ) : (
         <h1>Please Sign In</h1>
       )}

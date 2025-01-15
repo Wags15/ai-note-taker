@@ -14,3 +14,12 @@ export interface FileInfo {
   title: string;
   parentId?: string;
 }
+
+export interface NoteInfo {
+  id: string;
+  slide: any;
+  notes?: string;
+  summary?: string;
+  index: number;
+  parentId?: string;
+}

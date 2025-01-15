@@ -12,7 +12,7 @@ function FolderCard({
 }) {
   return (
     <div
-      className='w-[300px] max-h-[150px] bg-slate-200 m-5 rounded-xl rounded-tl-none text-black p-6 flex flex-col justify-between'
+      className='w-[300px] h-[150px] bg-slate-200 m-5 rounded-xl rounded-tl-none text-black p-6 flex flex-col justify-between'
       onClick={() => onClick(folder)}
     >
       <p className='wrap-text mb-9'>{folder.title}</p>
