@@ -14,7 +14,11 @@ export default function CreateFolderCard({
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    insertFolder({ userId: userId, title: title, parent: currFolder.id! });
+    insertFolder({ userId: userId, title: title, parent: currFolder.id! }).then(
+      () => {
+        window.location.reload;
+      }
+    );
     setIsOpen(false);
     setTitle("");
   };

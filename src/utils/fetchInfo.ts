@@ -1,30 +1,70 @@
-"use client";
-
 import { FileInfo, FolderInfo } from "@/app/types/global";
-import { createClient } from "./supabase/client";
+import { createClient } from "./supabase/server";
 
-const supabase = createClient();
-// async function fetchWithCache(queryKey: string, supabaseQuery) {
-//     const cachedData = localStorage.getItem(queryKey);
-//     if (cachedData) {
-//       return JSON.parse(cachedData);
-//     }
+export async function fetchFolder({
+  userId,
+  folderId,
+}: {
+  userId: string;
+  folderId?: string;
+}) {
+  const supabase = await createClient();
 
-//     const { data, error } = await supabaseQuery;
-//     if (error) throw error;
-
-//     localStorage.setItem(queryKey, JSON.stringify(data));
-//     return data;
-//   }
-
-export async function fetchFolderInfo({ userId }: { userId: string }) {
+  if (!folderId) {
+    return { title: "Your Notes" };
+  }
   const { data, error } = await supabase
     .from("folders")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .eq("id", folderId);
 
   const mappedFolders = data?.map(
     (folder): FolderInfo => ({
+      id: folder.id,
+      title: folder.name,
+      parentId: folder.parent,
+    })
+  );
+
+  if (mappedFolders) {
+    return mappedFolders[0];
+  } else {
+    return undefined;
+  }
+}
+export async function fetchFolderChildren({
+  userId,
+  folderId,
+}: {
+  userId: string;
+  folderId?: string;
+}) {
+  const supabase = await createClient();
+
+  let data, error;
+  if (!folderId) {
+    const result = await supabase
+      .from("folders")
+      .select("*")
+      .eq("user_id", userId)
+      .is("parent", null);
+
+    data = result.data;
+    error = result.error;
+  } else {
+    const result = await supabase
+      .from("folders")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("parent", folderId);
+
+    data = result.data;
+    error = result.error;
+  }
+
+  const mappedFolders = data?.map(
+    (folder: any): FolderInfo => ({
       id: folder.id,
       title: folder.name,
       parentId: folder.parent,
@@ -35,6 +75,8 @@ export async function fetchFolderInfo({ userId }: { userId: string }) {
 }
 
 export async function fetchFileInfo({ userId }: { userId: string }) {
+  const supabase = await createClient();
+
   const { data, error } = await supabase
     .from("files")
     .select("*")

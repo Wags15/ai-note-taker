@@ -1,6 +1,4 @@
 "use client";
-
-import { FileInfo, FolderInfo } from "@/app/types/global";
 import { createClient } from "./supabase/client";
 
 const supabase = createClient();
@@ -29,8 +27,6 @@ export async function insertFolder({
   const { data, error } = await supabase
     .from("folders")
     .insert({ user_id: userId, name: title, parent: parent });
-
-  console.log(error);
 }
 
 export async function insertFile({
